@@ -1,4 +1,4 @@
-import os # serve para verificar se o arquivo existe
+import os
 import csv
 import requests
 
@@ -19,7 +19,7 @@ def ler_notas_fiscais(arquivos_csv):
             print(f"Erro de permissão ao tentar abrir o arquivo: {arquivo_csv}")
     return notas_fiscais
 
-# Função para enviar as notas fiscais para o site (no caso preciso achar a API do site, enquanto isso estou usando um jsonplaceholder como teste)
+# Função para enviar as notas fiscais para o site
 def enviar_notas_fiscais(notas_fiscais, url):
     for nota in notas_fiscais:
         response = requests.post(url, json=nota)
@@ -28,11 +28,21 @@ def enviar_notas_fiscais(notas_fiscais, url):
         else:
             print(f"Falha ao enviar nota fiscal: {nota}")
 
-# Exemplo de uso (usando jsonplaceholder como teste)
+# Função para verificar os dados enviados
+def verificar_dados_enviados(url):
+    response = requests.get(url)
+    if response.status_code == 200:
+        print("Dados enviados:")
+        print(response.json())
+    else:
+        print(f"Falha ao verificar dados enviados. Status Code: {response.status_code}")
+
+# Exemplo de uso com csv de notas fiscais
 arquivos_csv = [
     "c:/Users/joaoj/OneDrive/Área de Trabalho/ler-nota-fiscal-python/notas_fiscais.csv",
     "c:/Users/joaoj/OneDrive/Área de Trabalho/ler-nota-fiscal-python/notas_fiscais1.csv"
-]  # lista de caminhos completos para os arquivos CSV (aqui posso usar varios csv como teste/exemplo...)
+]  # lista de caminhos completos para os arquivos CSV
 notas_fiscais = ler_notas_fiscais(arquivos_csv)
-url = 'https://jsonplaceholder.typicode.com/posts'  # endpoint de teste
+url = 'https://jsonplaceholder.typicode.com/posts'  # endpoint de teste (dados enviados são aleatorios)
 enviar_notas_fiscais(notas_fiscais, url)
+verificar_dados_enviados(url)
